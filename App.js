@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import { Stopwatch, Timer} from 'react-native-stopwatch-timer';
+import TimeFormatter from 'minutes-seconds-milliseconds';
 
 
 export default class App extends React.Component {
@@ -19,7 +20,17 @@ export default class App extends React.Component {
       <View style={styles.header}>
         <Text style={styles.title}>Stopwatch</Text>
       </View>
-    )
+    );
+  }
+
+  _renderTimers() {
+    return (
+      <View style={styles.timerWrapper}>
+        <View style={styles.timerWrapperInner}>
+          <Text style={styles.mainTimer}>{ TimeFormatter(this.state.stopwatchStart) }</Text>
+        </View>
+      </View>
+    );
   }
 
   toggleStopwatch() {
@@ -38,12 +49,10 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.top}>
-          <View style={styles.timerWrapperInner}>
-            <Stopwatch laps msecs start={this.state.stopwatchStart}
-              reset={this.state.stopwatchReset}
-              style={styles.mainTimer}
-              getTime={this.getFormattedTime} />
-          </View>
+            {this._renderTitle()}
+          <Stopwatch laps msecs start={this.state.stopwatchStart}
+            reset={this.state.stopwatchReset}
+            style={styles.timerWrapper, {fontSize:50}}/>
         </View>
         <View style={styles.bottom}>
           <TouchableHighlight onPress={this.toggleStopwatch} style={styles.buttonWrapper}>
@@ -63,6 +72,7 @@ const handleTimerComplete = () => alert("custom completion function");
 const styles = StyleSheet.create( {
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
 
   header: {
@@ -91,7 +101,6 @@ const styles = StyleSheet.create( {
   },
 
   timerWrapperInner: {
-    borderWidth: 0.5,
     alignSelf: 'center',
   },
 
